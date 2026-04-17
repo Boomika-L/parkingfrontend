@@ -1,0 +1,70 @@
+.addslot-container{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+}
+
+.addslot-card{
+  background:#1e293b;
+  padding:35px;
+  width:420px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+.addslot-card h2{
+  text-align:center;
+  margin-bottom:25px;
+  color:#38bdf8;
+}
+
+.addslot-form{
+  display:flex;
+  flex-direction:column;
+}
+
+.addslot-form label{
+  margin-top:14px;
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+.addslot-form input,
+.addslot-form textarea{
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  background:#0f172a;
+  color:white;
+}
+
+.addslot-form textarea{
+  resize:none;
+  height:80px;
+}
+
+.preview-img{
+  margin-top:15px;
+  width:100%;
+  border-radius:12px;
+}
+
+.add-btn{
+  margin-top:25px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#38bdf8;
+  color:#0f172a;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.add-btn:hover{
+  transform:scale(1.05);
+}
