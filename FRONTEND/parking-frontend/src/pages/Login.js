@@ -5,45 +5,37 @@ import "../styles/Login.css";
 function Login() {
   const navigate = useNavigate();
 
-  // 🔹 State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Handle Login
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const res = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    setTimeout(() => {
+      // 🔥 Get registered users from localStorage
+      const users = JSON.parse(localStorage.getItem("users")) || [];
 
-      const data = await res.json();
+      // 🔍 Find matching user
+      const foundUser = users.find(
+        (u) =>
+          u.email === email && u.password === password
+      );
 
-      if (res.ok && data.user) {
+      if (foundUser) {
         alert("Login successful ✅");
 
-        // ✅ Store user in localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // Save logged-in user
+        localStorage.setItem("user", JSON.stringify(foundUser));
 
-        // ✅ Navigate to dashboard
         navigate("/dashboard");
       } else {
-        alert(data.message || "Invalid credentials ❌");
+        alert("Invalid credentials ❌");
       }
 
-    } catch (error) {
-      console.log("Login error:", error);
-      alert("Server error ⚠️");
-    } finally {
       setLoading(false);
-    }
+    }, 500);
   };
 
   return (
@@ -54,7 +46,7 @@ function Login() {
         <p className="subtitle">Login to your ParkNova account</p>
 
         <form className="login-form" onSubmit={handleLogin}>
-          
+
           {/* Email */}
           <div className="input-group">
             <label>Email</label>
@@ -79,19 +71,16 @@ function Login() {
             />
           </div>
 
-          {/* Options */}
-          <div className="options">
-            <span className="forgot">Forgot password?</span>
-          </div>
-
-          {/* Button */}
-          <button type="submit" className="login-btn" disabled={loading}>
+          <button
+            type="submit"
+            className="login-btn"
+            disabled={loading}
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
 
         </form>
 
-        {/* Signup Redirect */}
         <p className="signup-text">
           Don’t have an account?{" "}
           <span onClick={() => navigate("/register")}>

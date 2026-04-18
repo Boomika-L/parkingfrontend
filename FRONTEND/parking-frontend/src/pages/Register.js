@@ -18,35 +18,47 @@ function Register() {
     });
   };
 
-  const handleRegister = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
+    // 🔥 Get existing users
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    const data = await res.json();
+    // 🔍 Check if email already exists
+    const exists = users.find((u) => u.email === form.email);
 
-    if (res.ok) {
-      alert("Registered Successfully 🎉");
-      navigate("/login");
-    } else {
-      alert(data.message || "Registration failed");
+    if (exists) {
+      alert("User already exists ❌");
+      return;
     }
+
+    // ➕ Add new user
+    const newUser = {
+      id: Date.now(),
+      name: form.name,
+      email: form.email,
+      password: form.password
+    };
+
+    users.push(newUser);
+
+    // 💾 Save to localStorage
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Registered Successfully 🎉");
+
+    navigate("/login");
   };
 
   return (
     <div className="signup-container">
       <div className="signup-card">
+
         <h2>Create Account</h2>
         <p className="subtitle">Join ParkNova today</p>
 
         <form className="signup-form" onSubmit={handleRegister}>
-          
+
           <div className="input-group">
             <label>Name</label>
             <input
@@ -86,12 +98,16 @@ function Register() {
           <button type="submit" className="signup-btn">
             Sign Up
           </button>
+
         </form>
 
         <p className="login-text">
           Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>Login</span>
+          <span onClick={() => navigate("/login")}>
+            Login
+          </span>
         </p>
+
       </div>
     </div>
   );

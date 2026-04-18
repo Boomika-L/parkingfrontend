@@ -28,7 +28,7 @@ function AddSlot() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:5000/slots", {
+    await fetch("https://jsonplaceholder.typicode.com/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

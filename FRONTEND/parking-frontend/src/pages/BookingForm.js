@@ -20,40 +20,43 @@ function BookingForm() {
     });
   };
 
-  const handleBooking = async (e) => {
+  const handleBooking = (e) => {
     e.preventDefault();
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    try {
-      const res = await fetch(
-        `http://localhost:5000/slots/book/${slot.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            userId: user.id,
-            date: form.date,
-            time: form.time
-          })
-        }
-      );
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Booking Confirmed 🚗");
-        navigate("/dashboard");
-      } else {
-        alert(data.message);
-      }
-
-    } catch (err) {
-      console.log(err);
-      alert("Booking failed");
+    if (!user) {
+      alert("User not found. Please login again.");
+      return;
     }
+
+    if (!slot) {
+      alert("No slot selected");
+      return;
+    }
+
+    // Get existing bookings
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+    // Create new booking
+    const newBooking = {
+      id: Date.now(),
+      userId: user.id,
+      userName: user.name,
+      slotId: slot.id,
+      location: slot.location,
+      price: slot.price,
+      date: form.date,
+      time: form.time
+    };
+
+    // Save to localStorage
+    bookings.push(newBooking);
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+
+    alert("Booking Confirmed 🚗 (Saved locally)");
+
+    navigate("/dashboard");
   };
 
   if (!slot) return <p>No slot selected</p>;
