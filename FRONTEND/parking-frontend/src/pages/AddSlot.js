@@ -9,8 +9,6 @@ function AddSlot() {
     image: ""
   });
 
-  const [preview, setPreview] = useState("");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -18,34 +16,34 @@ function AddSlot() {
       ...form,
       [name]: value
     });
-
-    // preview image
-    if (name === "image") {
-      setPreview(value);
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await fetch("https://jsonplaceholder.typicode.com/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
+    try {
+      await fetch("https://jsonplaceholder.typicode.com/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
 
-    alert("Slot added successfully!");
-    
-    // clear form
-    setForm({
-      location: "",
-      price: "",
-      description: "",
-      image: ""
-    });
-    setPreview("");
+      alert("Slot added successfully 🎉");
+
+      // clear form
+      setForm({
+        location: "",
+        price: "",
+        description: "",
+        image: ""
+      });
+
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
   };
 
   return (
@@ -83,22 +81,19 @@ function AddSlot() {
             placeholder="Short description"
           />
 
-          {/* <label>Image URL</label>
+          <label>Image URL</label>
           <input
             type="text"
             name="image"
             value={form.image}
             onChange={handleChange}
             placeholder="Paste image link"
-          /> */}
-
-          {/* {preview && (
-            <img src={preview} alt="preview" className="preview-img" />
-          )} */}
+          />
 
           <button type="submit" className="add-btn">
             Add Slot
           </button>
+
         </form>
       </div>
     </div>
